@@ -22,7 +22,7 @@ func main() {
 		panic("must specify an absolute path for the root directory to shuffle")
 	}
 
-	root := os.Args[1]
+	root := strings.TrimRight(os.Args[1], "/")
 	fmt.Println("reading " + root)
 
 	allowedExtensions := make(map[string]struct{}, len(os.Args)-2)
@@ -71,7 +71,7 @@ func main() {
 
 	for _, dir := range keys {
 		for _, filename := range files[dir] {
-			fmt.Println(filename)
+			fmt.Println(root+"/"+filename)
 		}
 	}
 }
