@@ -16,17 +16,18 @@ import (
 // sample usage:
 // go build .
 // # print a list of go files in the parent directory (and all subdirectories), shuffled by directory
-// ./dirShuffle $(dirname $(pwd)) ".go"
+// ./dirShuffle $(dirname $(pwd)) "./" ".go"
 func main() {
-	if len(os.Args) < 2 {
-		panic("must specify an absolute path for the root directory to shuffle")
+	if len(os.Args) < 3 {
+		panic("must specify an absolute path for the root directory to shuffle and the path prefix to use (may match the root directory path)")
 	}
+	pathPrefix := strings.TrimRight(os.Args[2], "/")
 
 	root := strings.TrimRight(os.Args[1], "/")
 	fmt.Println("reading " + root)
 
-	allowedExtensions := make(map[string]struct{}, len(os.Args)-2)
-	for _, ext := range os.Args[2:] {
+	allowedExtensions := make(map[string]struct{}, len(os.Args)-3)
+	for _, ext := range os.Args[3:] {
 		// use "." to indicate files with no extension
 		if ext == "." {
 			ext = ""
@@ -71,7 +72,7 @@ func main() {
 
 	for _, dir := range keys {
 		for _, filename := range files[dir] {
-			fmt.Println(root+"/"+filename)
+			fmt.Println(pathPrefix + "/" + filename)
 		}
 	}
 }
